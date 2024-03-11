@@ -1,0 +1,701 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%This file is modified by aloft in 2001 and then cxterm in 2002         %
+%This file is modified by hooklee for xjtuthesis.cls in 2003            %
+%Author info: alfot and cxterm are both the webmaster of www.ctex.org   %
+%             hooklee is the webmaster of www.chinatex.org              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is the file GB.cap of the CJK package
+%   for using Asian logographs (Chinese/Japanese/Korean) with LaTeX2e
+%
+% created by Werner Lemberg <wl@gnu.org>
+%
+% Version 4.4.0 (17-Apr-2001)
+%
+% merged with GB_aloft by aloft <aloft@126.com>(12/01/1999)
+%
+% patched by cxterm <cxterm@btamail.net.cn>(6/4/2002)
+%
+% enhanced for xjtuthesis document class by hooklee <hooklee@hooklee.com>(08/03/2003)
+% for LaTeX2e document class of Ph. D. thesis in Xi'an Jiaotong Univ.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\fileversion{4.4.0}
+\def\filedate{2001/04/17}
+\ProvidesFile{xjtu_GB.cap}[\filedate\space\fileversion]
+
+
+% Chinese captions for xjtuthesis.cls
+%
+% character set: GB 2312-80
+% encoding: EUC
+
+
+\newcommand\chnno@one[1]{%
+  \ifcase#1 零\or 一\or 二\or 三\or 四\or 五\or 六\or 七\or 八\or 九\or 十%
+  \else\@ctrerr\fi}
+
+\def\chnno@two#1#2{%
+  \ifnum #1=1\else\chnno@one{#1}\unskip\fi 十\unskip
+  \ifnum #2=0\else\chnno@one{#2}\fi\unskip
+}
+
+\newcommand\chnno[1]{%
+  \ifnum\arabic{#1}>99\@ctrerr\else
+    \ifnum\arabic{#1}>10
+      \expandafter\chnno@two\the\value{#1}\unskip
+    \else
+      \chnno@one{\arabic{#1}}\unskip
+    \fi
+  \fi}
+
+\@ifundefined{CJKnumber}
+  {\def\CJKnumber#1{\ifcase#1\or
+                    一\or二\or三\or四\or五\or
+                    六\or七\or八\or九\or十\fi}}{}
+
+\if@XJTUenglishthesis
+    \renewcommand\bibname{Bibliography (参考文献)}
+    \renewcommand\contentsname{Table of Contents (目录)}
+    \renewcommand\listfigurename{ListofFigures (插图索引)}
+    \renewcommand\listtablename{List of Tables (表格索引)}
+    \renewcommand\bibname{Bibliography (参考文献)}
+    \renewcommand\indexname{Index (索引)}
+    \renewcommand\XJTU@schoolheading{Ph. D. Dissertation of Xi'an Jiaotong University (西安交通大学博士学位论文)}
+\else
+%如果是中文博士论文，才需要以下重定义
+\renewcommand\contentsname{目　　录}
+\renewcommand\listfigurename{插图索引}
+\renewcommand\listtablename{表格索引}
+%bibname的重定义与multibib有冲突：总是覆盖\newcites 中指定的bibname
+\renewcommand\bibname{参考文献}
+\renewcommand\indexname{索引}
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+\renewcommand\partname{第\CJKnumber{\@arabic\c@part}部分}
+\renewcommand\chaptername{第\CJKnumber{\@arabic\c@chapter}章}
+\gdef\@chapapp{\chaptername}
+%\renewcommand\appendixname{附录~\thechapter}
+\renewcommand\appendixname{附录}
+\renewcommand\today{\number\year年\number\month月\number\day日}
+%关于页眉页脚的重定义
+\def\ps@headings{%
+    \def\@oddfoot{\hfil\thepage\hfil}%
+    \def\@evenfoot{\hfil\thepage\hfil}%
+    \def\@evenhead{\XJTU@headrule{\leftmark}}%
+    \def\@oddhead{\XJTU@headrule{\XJTU@schoolheading}}%
+    \let\@mkboth\markboth
+\def\chaptermark##1{%
+    \markboth {\MakeUppercase{%
+    \ifnum \c@secnumdepth >\m@ne
+        \if@mainmatter
+        \@chapapp\ \ %
+        \fi
+    \fi
+    ##1}}{}}%
+\def\sectionmark##1{%
+    \markright {
+    \ifnum \c@secnumdepth >\z@
+        \thesection. \ %
+    \fi
+    ##1}}}
+\def\ps@altheadings{%
+\def\@oddfoot{\hfil\thepage\hfil}%
+\def\@evenfoot{\hfil\thepage\hfil}%
+\def\@evenhead{\XJTU@headrule{\XJTU@schoolheading}}%
+\def\@oddhead{\XJTU@headrule{\leftmark}}%
+\let\@mkboth\markboth
+\def\chaptermark##1{%
+    \markboth {\MakeUppercase{%
+    \ifnum \c@secnumdepth >\m@ne
+        \if@mainmatter
+        \@chapapp\ \ %
+        \fi
+    \fi
+    ##1}}{}}%
+\def\sectionmark##1{%
+    \markright {
+    \ifnum \c@secnumdepth >\z@
+        \thesection. \ %
+    \fi
+    ##1}}}
+%关于chapter的重定义
+\def\chaptermark#1{%
+    \markboth {\MakeUppercase{%%
+    \ifnum \c@secnumdepth >\m@ne
+        \if@mainmatter
+        \@chapapp\ \ %
+        \fi
+    \fi
+    #1}}{}}%
+\def\sectionmark#1{%
+    \markright {
+    \ifnum \c@secnumdepth >\z@
+        \S\thesection. \ %
+    \fi
+    #1}}
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\protect\numberline{\partname}\hspace{3em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    \markboth{\MakeUppercase\partname\hspace{1em}#1}{\MakeUppercase\partname\hspace{1em}#1}%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >-2\relax
+       \huge\bfseries \partname
+       \par
+       \vskip 20\p@
+     \fi
+     \Huge \bfseries #2\par}%
+    \@endpart\if@openright\cleardoublepage\fi}
+\renewcommand\XJTU@chapformati{\zihao{-2}\bfseries}
+\def\@makechapterhead#1{%
+  \@XJTUcontrolindentfalse
+  \vspace*{\XJTU@abovechap}%原为\vspace*{50\p@}
+  {\centering\normalfont%原为\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter
+        \XJTU@chapformati\@chapapp\hspace{\XJTU@chaplabelsep}
+      \fi
+    \fi
+    #1\par\nobreak
+    \vskip \XJTU@belowchap%原为40\p@
+  }
+  \@XJTUcontrolindenttrue}
+\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
+                       \if@mainmatter
+                         \refstepcounter{chapter}%
+                         \typeout{\@chapapp}%
+                       \fi
+                       \if@XJTUappendixtoc
+                           %\addcontentsline{toc}{part}{\appendixname}
+                           \@XJTUappendixtocfalse
+                       \fi
+                       \if@mainmatter
+                         \addcontentsline{toc}{chapter}%
+                                   {\protect\numberline{\@chapapp}#1}%
+                       \else
+                         \addcontentsline{toc}{chapter}{#1}%
+                       \fi
+                    \else
+                      \addcontentsline{toc}{chapter}{#1}%
+                    \fi
+                    \chaptermark{#1}%
+                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
+                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
+                    \if@twocolumn
+                      \@topnewpage[\@makechapterhead{#2}]%
+                    \else
+                      \@makechapterhead{#2}%
+                      \@afterheading
+                    \fi}
+\renewcommand*\l@chapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 1.0em \@plus\p@
+    \setlength\@tempdima{4.0em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
+\renewcommand\appendix{\par
+  \setcounter{chapter}{0}%
+  \setcounter{section}{0}%
+  \gdef\thechapter{\@Alph\c@chapter}%
+  \gdef\@chapapp{\appendixname\thechapter}%
+  \@XJTUappendixtoctrue}
+\fi
+%End of \if@XJTUenglishthesis
+
+
+%封面自上而下的垂直距离
+\newlength\XJTU@covervskipi
+\newlength\XJTU@covervskipii
+\newlength\XJTU@covervskipiii
+\newlength\XJTU@covervskipiv
+\newlength\XJTU@covervskipv
+\newlength\XJTU@covervskipvi
+\newlength\XJTU@covervskipvii
+\newlength\XJTU@covervskipviii
+\setlength\XJTU@covervskipi{20pt}
+\setlength\XJTU@covervskipii{10pt}
+\setlength\XJTU@covervskipiii{30pt}
+\setlength\XJTU@covervskipiv{15pt}
+\setlength\XJTU@covervskipv{20pt}
+\setlength\XJTU@covervskipvi{10pt}
+\setlength\XJTU@covervskipvii{20pt}
+\newcommand\setcovervskips[7]{%
+\setlength\XJTU@covervskipi{#1}
+\setlength\XJTU@covervskipii{#2}
+\setlength\XJTU@covervskipiii{#3}
+\setlength\XJTU@covervskipiv{#4}
+\setlength\XJTU@covervskipv{#5}
+\setlength\XJTU@covervskipvi{#6}
+\setlength\XJTU@covervskipvii{#7}}
+%封面自上而下的字体大小
+\newcommand\XJTU@coverformati{\zihao{-4}}
+\newcommand\XJTU@coverformatii{\zihao{2}\hei}
+\newcommand\XJTU@coverformatiii{\LARGE\bf}
+\newcommand\XJTU@coverformativ{\zihao{-2}}
+\newcommand\XJTU@coverformatv{\zihao{4}\kai}
+\newcommand\XJTU@coverformatvi{\zihao{-4}}
+\newcommand\setcoverformats[6]{
+\renewcommand\XJTU@coverformati{#1}
+\renewcommand\XJTU@coverformatii{#2}
+\renewcommand\XJTU@coverformatiii{#3}
+\renewcommand\XJTU@coverformativ{#4}
+\renewcommand\XJTU@coverformatv{#5}
+\renewcommand\XJTU@coverformatvi{#6}}
+%封面自上而下的行间距
+\newcommand*\XJTU@coverlinestretchi{1.5}
+\newcommand*\XJTU@coverlinestretchii{1}
+\newcommand*\XJTU@coverlinestretchiii{2}
+\newcommand*\XJTU@coverlinestretchiv{1.5}
+\newcommand\setcoverstretchs[4]{
+\renewcommand*\XJTU@coverlinestretchi{#1}
+\renewcommand*\XJTU@coverlinestretchii{#2}
+\renewcommand*\XJTU@coverlinestretchiii{#3}
+\renewcommand*\XJTU@coverlinestretchiv{#4}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newlength\XJTU@catIDwidth
+\setlength\XJTU@catIDwidth{5cm}
+\newlength\XJTU@securitywidth
+\newlength\XJTU@threechinese
+\newlength\XJTU@temp
+%封面上面部分的内容 
+\newcommand\XJTU@abovetitle{%
+\XJTU@coverformati\setlength\XJTU@temp{\XJTU@coverlinestretchi\baselineskip-\baselineskip}
+\settowidth\XJTU@threechinese{分类号}
+\setlength\XJTU@securitywidth{\textwidth-\XJTU@catIDwidth-2\XJTU@threechinese-2em} 
+\noindent分类号~\underline{\makebox[\XJTU@catIDwidth][c]{\XJTU@catID}}%
+~密级~\underline{\makebox[\XJTU@securitywidth][c]{\XJTU@security}}\\[\XJTU@temp]
+\WideChinese*{分类号~}{U\hfil{}D\hfil{}C~~}%
+\underline{\makebox[\XJTU@catIDwidth][s]{\hfil\XJTU@UDC\hfil}}}%封面中上部的内容 
+\newcommand\XJTU@middletitle{%
+\includegraphics[width=\XJTU@schoollogowidth]{\XJTU@schoollogo}\\[\XJTU@covervskipii] 
+{\XJTU@coverformatii\XJTU@thesisname}\\[\XJTU@covervskipiii] 
+\renewcommand\baselinestretch{\XJTU@coverlinestretchii}\normalsize
+{\XJTU@coverformatiii\if@XJTUenglishthesis\@title\\[\XJTU@covervskipiv]\fi}
+{\XJTU@coverformativ\XJTU@ctitle}\\[\XJTU@covervskipv] 
+{\XJTU@coverformatv\XJTU@cauthor}\renewcommand\baselinestretch{1}\normalsize} 
+%封面中下部的内容 
+\newlength\XJTU@cteacheriwidth
+\newlength\XJTU@cteacheriiwidth
+\newlength\XJTU@maxcteacherwidth
+\newlength\XJTU@fourchinese
+\newlength\XJTU@sevenchinese
+\newlength\XJTU@cschoolwidth 
+\newlength\XJTU@cmajorwidth 
+\newlength\XJTU@maxwidth@cschoolmajor 
+\newlength\XJTU@committeeboxwidth
+\setlength\XJTU@committeeboxwidth{0.9\textwidth}
+\newcommand\committeerightmargin[1]{\setlength\XJTU@committeeboxwidth{\textwidth - #1 - #1}}
+\newcommand\XJTU@belowtitle{%
+\XJTU@coverformatvi
+\settowidth\XJTU@cteacheriwidth{\kai\XJTU@cteacheri} 
+\settowidth\XJTU@cteacheriiwidth{\kai\XJTU@cteacherii} 
+\XJTU@maxlength{\XJTU@cteacheriwidth}{\XJTU@cteacheriiwidth}{\XJTU@maxcteacherwidth}
+\settowidth\XJTU@fourchinese{专业名称} 
+\settowidth\XJTU@cmajorwidth{\XJTU@cmajor} 
+\settowidth\XJTU@cschoolwidth{\XJTU@cschool} 
+\XJTU@maxlength{\XJTU@cmajorwidth}{\XJTU@cschoolwidth}{\XJTU@maxwidth@cschoolmajor}
+\renewcommand\arraystretch{\XJTU@coverlinestretchiii}
+\begin{tabular}{cp{\XJTU@maxcteacherwidth}p{\XJTU@fourchinese}p{\XJTU@maxwidth@cschoolmajor}}
+指导教师姓名 & \makebox[\XJTU@maxcteacherwidth][s]{\kai\XJTU@cteacheri} & 
+\makebox[\XJTU@fourchinese][s]{\kai\XJTU@cprofessori} & 
+\makebox[\XJTU@maxwidth@cschoolmajor][s]{\kai\XJTU@cschool}\\
+\if@XJTUcteacherii
+    & \makebox[\XJTU@maxcteacherwidth][s]{\kai\XJTU@cteacherii} & 
+    \makebox[\XJTU@fourchinese][s]{\kai\XJTU@cprofessorii} & 
+    \makebox[\XJTU@maxwidth@cschoolmajor][s]{\kai\XJTU@cschoolii}\\
+\fi
+\song 申请学位级别 & \makebox[\XJTU@maxcteacherwidth][s]{\kai\XJTU@cdegree} & \song 专业名称 & 
+\makebox[\XJTU@maxwidth@cschoolmajor][s]{\kai\XJTU@cmajor}\\ 
+\song 论文提交日期 & \multicolumn{3}{l}{\underline{ \XJTU@cdatesubmitted }\hspace{1em}\hfil 论文答辩日期\hspace{\ccwd}\underline{ \XJTU@cdatedefense }}\\
+\end{tabular}\\[\XJTU@covervskipvii]\renewcommand\baselinestretch{1}\normalsize
+\renewcommand\arraystretch{\XJTU@coverlinestretchiv}
+\settowidth\XJTU@sevenchinese{答辩委员会主席}
+\makebox[\XJTU@committeeboxwidth][r]{%
+\hfil\begin{tabular}{p{\XJTU@sevenchinese}r}
+答辩委员会主席 & \underline{\hspace{\XJTU@csignaturewidth}}\\
+\makebox[\XJTU@sevenchinese][s]{评阅人} & \underline{\hspace{\XJTU@csignaturewidth}}\\
+& \underline{\hspace{\XJTU@csignaturewidth}}\\
+& \underline{\hspace{\XJTU@csignaturewidth}}\\
+& \underline{\hspace{\XJTU@csignaturewidth}}\\
+& \underline{\hspace{\XJTU@csignaturewidth}}\\
+\end{tabular}}\renewcommand\arraystretch{1}} 
+%重新定义titlepage和maketitle
+\newlength\XJTU@coverleft
+\newlength\XJTU@coverright
+\newlength\XJTU@covertop
+\newlength\XJTU@coverbottom
+\if@XJTU@twoside%\if@twoside
+    \setlength\XJTU@coverleft{\XJTU@left+\XJTU@binding}
+\else
+    \setlength\XJTU@coverleft{\XJTU@left}
+\fi
+\setlength\XJTU@coverright{\XJTU@right}
+\setlength\XJTU@covertop{\XJTU@top}
+\setlength\XJTU@coverbottom{\XJTU@bottom}
+\newlength\XJTU@coverwidth
+\newlength\XJTU@coverheight
+\setlength\XJTU@coverwidth{\paperwidth-\XJTU@coverleft-\XJTU@coverright}
+\setlength\XJTU@coverheight{\paperheight-\XJTU@covertop-\XJTU@coverbottom}
+\newcommand\setcovermargins[4]{%
+\setlength\XJTU@coverleft{#1}
+\setlength\XJTU@coverright{#2}
+\setlength\XJTU@covertop{#3}
+\setlength\XJTU@coverbottom{#4}
+\ifthenelse{\lengthtest{\XJTU@coverbottom < \XJTU@bottom}}%
+{%如果封面下边距小于正常页边距，则设置日期在页脚
+\@XJTUcoverdateinfoottrue
+\setlength\XJTU@coverheight{\paperheight-#3-\XJTU@bottom}}
+{%如果封面下边距大于正常页边距，则设置日期在正文
+\setlength\XJTU@coverheight{\paperheight-#3-#4}}
+\setlength\XJTU@coverwidth{\paperwidth-#1-#2}}%设置封面页边距
+\newcommand\hcentercover[1][\textwidth]{%
+\setlength\XJTU@coverleft{(\paperwidth-#1)/2}
+\setlength\XJTU@coverright{\XJTU@coverleft}
+\setlength\XJTU@coverwidth{\paperwidth-\XJTU@coverleft-\XJTU@coverright}}%根据目前的页面布局自动设置水平居中
+\newcommand\vcentercover[1][\textheight]{%
+\setlength\XJTU@covertop{(\paperheight-#1)/2}
+\setlength\XJTU@coverbottom{\XJTU@covertop}
+\ifthenelse{\lengthtest{\XJTU@coverbottom < \XJTU@bottom}}
+{%%如果封面下边距小于正常页边距，则设置日期在页脚
+\@XJTUcoverdateinfoottrue
+\setlength\XJTU@coverheight{\paperheight-\XJTU@covertop-\XJTU@bottom}}
+{%如果封面下边距大于正常页边距，则设置日期在正文
+\setlength\XJTU@coverheight{\paperheight-\XJTU@covertop-\XJTU@coverbottom}}}%根据目前的页面布局自动设置垂直居中
+\newcommand\centercover{\hcentercover\vcentercover}%根据目前的页面布局自动设置水平和水平居中
+\centercover
+%定义一个新的页面布局风格
+\def\ps@titlepagefoot{%
+    \def\@oddfoot{\hfil\XJTU@headerformat\raisebox{\XJTU@coverbottom-\footskip}{\XJTU@cdatesubmitted}\hfil}%
+    \def\@evenfoot{\hfil\XJTU@headerformat\raisebox{\XJTU@coverbottom-\footskip}{\XJTU@cdatesubmitted}\hfil}%
+    \let\@evenhead\empty%
+    \let\@oddhead\empty%
+    \let\@mkboth\@gobbletwo
+    \let\chaptermark\@gobble
+    \let\sectionmark\@gobble
+    }
+\renewenvironment{titlepage}
+    {%
+      \if@openright
+        \cleardoublepage
+      \else
+        \clearpage
+      \fi
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse\newpage
+      \fi
+      \pagestyle{empty}
+      \if@XJTUcoverdateinfoot
+        \thispagestyle{titlepagefoot}
+      \fi
+      %\setcounter{page}\@ne
+    }%
+    {%
+    \if@restonecol\twocolumn \else \newpage \fi
+     %\if@twoside\else
+     %   \setcounter{page}\@ne
+     %\fi
+    }
+\renewcommand\maketitle{%
+  \@XJTUcontrolindentfalse
+  \begin{titlepage}%
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  %\let \footnote \thanks
+  \setlength\XJTU@temp{\XJTU@covertop-\XJTU@top-\baselineskip}%
+  \vspace*{\XJTU@temp}%
+  %不知何故，\XJTU@coverleft-\oddsidemargin-1in似不足，-0.5\baselineskip用于补偿
+  \setlength\XJTU@temp{\XJTU@coverleft-\oddsidemargin-1in-0.2\baselineskip}%
+  \noindent\hspace*{\XJTU@temp}%
+  \if@XJTUcoverboxed\fbox{\fi%
+  \begin{minipage}[t][\textheight][s]{\XJTU@coverwidth}
+  \XJTU@abovetitle
+  \begin{center}%
+    \vskip \XJTU@covervskipi
+    \XJTU@middletitle\\[\XJTU@covervskipvi]\XJTU@belowtitle
+  \end{center}\par
+  %\@thanks
+  \if@XJTUcoverdateinfoot
+    \vfil\null
+  \else
+    \vfil
+    \centerline{\hfil\raisebox{\XJTU@coverbottom-\XJTU@bottom}{\XJTU@cdatesubmitted}\hfil}
+  \fi
+  \end{minipage}\if@XJTUcoverboxed}\fi
+  \end{titlepage}%
+  \normalsize\CJKindent
+  \setcounter{footnote}{0}%
+  %\global\let\thanks\relax
+  \global\let\maketitle\relax
+  %\global\let\@thanks\@empty
+  %\global\let\@author\@empty
+  %\global\let\@date\@empty
+  %\global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+  \@XJTUcontrolindenttrue
+  \if@XJTU@twoside
+      \cleardoublepage
+  \else
+      \newpage
+  \fi
+  \if@XJTU@twoside
+      \cleardoublepage
+  \else
+      \newpage
+  \fi
+  \frontmatter
+}
+
+%支持中文标题的定理环境
+\if@XJTUenglishthesis\else
+    \newtheorem{definition}{\hei 定义}[chapter]
+    \newtheorem{proposition}{\hei 命题}[chapter]
+    \newtheorem{lemma}{\hei 引理}[chapter]
+    \newtheorem{theorem}{\hei 定理}[chapter]
+    \newtheorem{axiom}{\hei 公理}[chapter]
+    \newtheorem{corollary}{\hei 推论}[chapter]
+    \newtheorem{exercise}{\hei 练习}[chapter]
+    \newtheorem{remark}{\hei 注释}[chapter]
+    \newtheorem{example}{\hei 例}[chapter]
+    \newtheorem{pic}{\footnotesize\hei 图}[chapter]
+    \newenvironment{proof}{\noindent\kai 证明: \song}{\hfill$\blacksquare$\vskip 0.5\baselineskip}
+\fi
+\newtheorem{cdefinition}{\hei 定义}[chapter]
+\newtheorem{cproposition}{\hei 命题}[chapter]
+\newtheorem{clemma}{\hei 引理}[chapter]
+\newtheorem{ctheorem}{\hei 定理}[chapter]
+\newtheorem{caxiom}{\hei 公理}[chapter]
+\newtheorem{ccorollary}{\hei 推论}[chapter]
+\newtheorem{cexercise}{\hei 练习}[chapter]
+\newtheorem{cremark}{\hei 注释}[chapter]
+\newtheorem{cexample}{\hei 例}[chapter]
+\newenvironment{cproof}{\noindent\kai 证明: \song}{\hfill$\blacksquare$\vskip 0.5\baselineskip}
+
+%部分论文中文信息重定义
+\renewcommand\XJTU@cprofessori{教授}
+\renewcommand\XJTU@cprofessorii{教授}
+\renewcommand\XJTU@cschool{西安交通大学}
+\renewcommand\XJTU@cschoolii{西安交通大学}
+\newcommand\cteacher[2][教授]{%
+\renewcommand\XJTU@cteacheri{#2}
+\renewcommand\XJTU@cprofessori{#1}}
+\newcommand\cteacherii[2][教授]{%
+\renewcommand\XJTU@cteacherii{#2}
+\renewcommand\XJTU@cprofessorii{#1}
+\@XJTUcteacheriitrue}
+
+% 独创性声明与保护知识产权声明
+\newcommand\XJTU@noveltyformati{\hei\zihao{4}}
+\newcommand\XJTU@noveltyformatii{\normalsize}
+\newcommand\setnoveltyformats[2]{%
+\renewcommand\XJTU@noveltyformati{#1}
+\renewcommand\XJTU@noveltyformatii{#2}}%设置标题和正文文字格式
+\newcommand\XJTU@noveltystretchi{1.5}
+\newcommand\XJTU@noveltystretchii{1.5}
+\newcommand\setnoveltystretchs[2]{%
+\renewcommand\XJTU@noveltystretchi{#1}
+\renewcommand\XJTU@noveltystretchii{#2}}%设置正文行间距
+\newlength\XJTU@noveltyskipi
+\setlength\XJTU@noveltyskipi{0pt}
+\newlength\XJTU@noveltyskipii
+\setlength\XJTU@noveltyskipii{20pt}
+\newlength\XJTU@noveltyskipiii
+\setlength\XJTU@noveltyskipiii{10pt}
+\newlength\XJTU@noveltyskipiv
+\setlength\XJTU@noveltyskipiv{40pt}
+\newcommand\setnoleltyskips[4]{%
+\setlength\XJTU@noveltyskipi{#1}
+\setlength\XJTU@noveltyskipii{#2}
+\setlength\XJTU@noveltyskipiii{#3}
+\setlength\XJTU@noveltyskipiv{#4-#1}}%设置垂直间距
+\if@XJTUenglishthesis
+\newcommand\XJTU@noveltyleading{Originality and Copyright Ownership Statement
+(独创性与知识产权权属声明)}
+\else
+\newcommand\XJTU@noveltyleading{知识产权声明和独创性声明}
+\newcommand\XJTU@noveltyname{知识产权声明和独创性声明}
+\fi
+\pagenumbering{Roman}
+%\newcommand\setnoveltyhead[1]{\renewcommand\XJTU@noveltyleading{#1}}%设置页眉
+%独创性声明
+\newcommand\XJTU@novelty{%
+\hspace{1cm}
+\begin{center}
+\XJTU@noveltyformati\you\hei\zihao{3}西北大学学位论文知识产权声明书
+\end{center}\par
+\setlength\XJTU@temp{\XJTU@noveltyskipii-\baselineskip}
+\renewcommand\baselinestretch{\XJTU@noveltystretchi}\XJTU@noveltyformatii
+本人完全了解学校有关保护知识产权的规定，即：研究生在校攻读学位期间论文工作的知识
+产权单位属于西北大学。学校有权保留并向国家有关部门或机构送交论文的复印件和电子版。
+本人允许论文被查阅和借阅。学校可以将本学位论文的全部或部分内容编入有关数据库进行检索，
+可以采用影印、缩印或扫描等复制手段保存和汇编本学位论文。同时，本人保证，毕业后结合学
+位论文研究课题再撰写的文章一律注明作者单位为西北大学。\par
+保密论文待解密后适用本声明。
+
+\vspace{0.5cm}{论文作者签名：\underline{\hspace{9em}} %
+\hfil%
+指导教师签名：\underline{\hspace{9em}}
+
+\vspace{0.2cm}\hspace{3cm}年\hspace{1.2cm}月\hspace{1.2cm}日} \hspace{3.2cm}年\hspace{1.2cm}月\hspace{1.2cm}日
+
+\vspace{1cm}
+\centerline{\textbf{---------------------------------------------------------------------------------------------}}
+\renewcommand\baselinestretch{1}\normalsize\normalfont}
+%保护知识产权声明
+\newcommand\XJTU@copyright{%
+\begin{center}
+\XJTU@noveltyformati\you\hei\zihao{3}西北大学学位论文独创性声明
+\end{center}\par
+\setlength\XJTU@temp{\XJTU@noveltyskipii-\baselineskip}
+\renewcommand\baselinestretch{\XJTU@noveltystretchi}\XJTU@noveltyformatii
+本人声明：所呈交的学位论文是本人在导师指导下进行的研究工作及取得的研究成果。
+据我所知，除了文中特别加以标注和致谢的地方外，本论文不包含其他人已经发表或撰写过的研究成果，
+也不包含为获得西北大学或其它教育机构的学位或证书而使用过的材料。与我一同工作的同志对本研究
+所做的任何贡献均已在论文中作了明确的说明并表示谢意。
+
+\vspace{0.5cm}\hspace{16.9em}论文作者签名：\underline{\hspace{9em}}\par
+
+\vspace{0.5cm}\hspace{10.1cm}年\hspace{1.2cm}月\hspace{1.2cm}日
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\baselinestretch{\XJTU@noveltystretchii}\XJTU@noveltyformatii
+\renewcommand\baselinestretch{1}\normalsize\normalfont}
+\newcommand\XJTU@noveltynamestyle{\XJTU@noveltyformati}
+\newcommand\XJTU@noveltyleadingname{\XJTU@noveltyname}
+\newlength\XJTU@noveltybelowkip
+\setlength\XJTU@noveltybelowkip{0.5\baselineskip}
+\newcommand\noveltyleadingname[2]{%
+\centerline{\XJTU@noveltynamestyle}\par\vspace{\XJTU@noveltybelowkip}\XJTU@noveltybodyformat}
+\markboth{\MakeUppercase\XJTU@noveltyleading}{\MakeUppercase\XJTU@noveltyleading}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\noveltyandcopyright{%
+\XJTU@novelty\vspace{\XJTU@noveltyskipiv}%
+\XJTU@copyright}
+
+
+%英文摘要抬头论文信息支持
+\newlength\XJTU@signaturewidth
+\setlength\XJTU@signaturewidth{2.5cm}
+\newcommand\signaturewidth[1]{\setlength\XJTU@signaturewidth{#1}}%设置签名下划线长度
+\newlength\XJTU@titlewidth
+\newlength\XJTU@supervisorwidth
+\newcommand\XJTU@signature{Signature: \underline{\hspace{\XJTU@signaturewidth}}}
+\newcommand\XJTU@abstractformati{\large}
+\newcommand\XJTU@abstractformatii{\bfseries}
+\newcommand\setabstractformats[2][\bfseries]{%
+\renewcommand\XJTU@abstractformati{#2}
+\renewcommand\XJTU@abstractformatii{#1}}%设置摘要文字格式
+\newcommand\XJTU@abstractleading{%
+\XJTU@abstractformati
+\settowidth\XJTU@supervisorwidth{\textbf{Supervisor}:}
+\setlength\XJTU@titlewidth{\textwidth-\XJTU@supervisorwidth-0.5em}
+\normalsize\normalfont}
+\newlength\XJTU@abstractaboveskip
+\setlength\XJTU@abstractaboveskip{\baselineskip}
+\newlength\XJTU@abstractbelowkip
+\setlength\XJTU@abstractbelowkip{0.5\baselineskip}
+\newcommand\setabstractskips[2]{
+\setlength\XJTU@abstractaboveskip{#1}
+\setlength\XJTU@abstractbelowkip{#2}}%设置摘要页垂直间距
+%中文摘要抬头论文信息支持
+\newlength\XJTU@csignaturewidth
+\setlength\XJTU@csignaturewidth{2.5cm}
+\newcommand\csignaturewidth[1]{\setlength\XJTU@csignaturewidth{#1}}%设置中文签名下划线长度
+\newlength\XJTU@csupervisorwidth
+\newlength\XJTU@ctitlewidth
+\newcommand\XJTU@csignature{(签名) \underline{\hspace{\XJTU@csignaturewidth}}}
+\newcommand\XJTU@cabstractformati{\zihao{4}}
+\newcommand\XJTU@cabstractformatii{\hei}
+\newcommand\setcabstractformats[2][\hei]{%
+\renewcommand\XJTU@cabstractformati{#2}
+\renewcommand\XJTU@cabstractformatii{#1}}
+\newcommand\XJTU@cabstractleading{%
+\XJTU@cabstractformati
+\settowidth{\XJTU@csupervisorwidth}{\XJTU@cabstractformatii{论文题目}}
+\setlength\XJTU@ctitlewidth{\textwidth-\XJTU@csupervisorwidth-0.5em}
+\normalsize\normalfont}
+%中英文摘要页支持
+\newcommand\XJTU@abstractname{Abstract}
+\if@XJTUenglishthesis
+    \newcommand\XJTU@cabstractname{中文摘要}
+\else
+    \newcommand\XJTU@cabstractname{摘　　要}
+\fi
+\newcommand\abstractname[2]{%
+\renewcommand\XJTU@abstractname{Abstract}
+\renewcommand\XJTU@cabstractname{摘　　要}
+\renewcommand\XJTU@abstractnamestyle{{\XJTU@abstractnameformat\XJTU@abstractname}}
+\renewcommand\XJTU@cabstractnamestyle{{\XJTU@cabstractnameformat\XJTU@abstractname}}}%设置中英文摘要名称(使用缺省样式)
+\newcommand\XJTU@abstractnameformat{\LARGE\sf\bf}
+\newcommand\XJTU@cabstractnameformat{\hei\Large}
+\newcommand\abstractnameformat[2]{%
+\renewcommand\XJTU@abstractnamestyle{{#1\XJTU@abstractname}}
+\renewcommand\XJTU@cabstractnamestyle{{#2\XJTU@abstractname}}}%设置中英文摘要样式一(使用缺省名称)
+\newcommand\XJTU@abstractnamestyle{{\LARGE\sf\bf\XJTU@abstractname}}
+\newcommand\XJTU@cabstractnamestyle{{\hei\LARGE\XJTU@cabstractname}}
+\newcommand\abstractnamestyle[2]{%
+\renewcommand\XJTU@abstractnamestyle{#1}
+\renewcommand\XJTU@cabstractnamestyle{#2}}%设置中英文摘要样式二(同时修改样式与名称)
+\newcommand\XJTU@abstractleadingname{\XJTU@abstractname}
+\newcommand\XJTU@cabstractleadingname{\XJTU@cabstractname}
+\newcommand\abstractleadingname[2]{%
+\renewcommand\XJTU@abstractleadingname{Abstract}
+\renewcommand\XJTU@cabstractleadingname{摘　　要}}%设置摘要页页眉
+\newcommand\XJTU@abstractbodyformat{\normalsize}
+\newcommand\XJTU@cabstractbodyformat{\normalsize}
+\newcommand\setabstractbodyformat[2]{%
+\renewcommand\XJTU@abstractbodyformat{#1}
+\renewcommand\XJTU@cabstractbodyformat{#2}}%设置摘要正文字体风格
+\newenvironment{abstract}{%英文摘要
+\if@openright\cleardoublepage\fi%
+\renewcommand\XJTU@abstractname{Abstract}
+\markboth{Abstract(英文摘要)}{\MakeUppercase\XJTU@cabstractleadingname}%
+{\XJTU@abstractleading}\vspace{\XJTU@abstractaboveskip}%
+\centerline{\XJTU@abstractnamestyle}\par\vspace{\XJTU@abstractbelowkip}\XJTU@abstractbodyformat}
+{\newpage}
+\newcommand\keywords[2][0pt]{\vskip #1\noindent\textbf{Keywords:} #2}
+\newenvironment{cabstract}{%中文摘要
+\if@openright\cleardoublepage\fi%
+\markboth{\MakeUppercase\XJTU@cabstractleadingname}{\MakeUppercase\XJTU@cabstractleadingname}%
+
+{\XJTU@cabstractleading}\vspace{\XJTU@abstractaboveskip}%
+\centerline{\XJTU@cabstractnamestyle}\par\vspace{\XJTU@abstractbelowkip}\XJTU@cabstractbodyformat}
+{\newpage}
+\newcommand\ckeywords[2][0pt]{\vskip #1\noindent{\hei 关键词：} #2}
+
+% 致谢部分
+\if@XJTUenglishthesis
+\newcommand\XJTU@acknowledgement{Acknowledgement (致谢)}
+\else
+\newcommand\XJTU@acknowledgement{致　　　谢}
+\fi
+\newcommand\setAcknowledgement[1]{\renewcommand\XJTU@acknowledgement{#1}}
+\newenvironment{acknowledgement}{%致谢
+\if@openright\cleardoublepage\fi%
+\newaddcontentsline{toc}{chapter}{\XJTU@acknowledgement}%
+\chapter*{\XJTU@acknowledgement}%
+\markboth{\MakeUppercase\XJTU@acknowledgement}{\MakeUppercase\XJTU@acknowledgement}}
+{}
+
+
+
+\endinput
+%% endof file
